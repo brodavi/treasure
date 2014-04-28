@@ -47,6 +47,11 @@ function handleClick (e) {
 
   player.digs++;
 
+  if (depth === 10) {
+    alert('CONGRATULATIONS! YOU REACHED LEVEL 10 in '+ player.digs +' moves! Can you get there with fewer digs? Refresh the page to try again!');
+  }
+
+
   if (depth < 10) {
 
     var x = parseInt(e.target.getAttribute('data-x'), 10);
