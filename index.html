@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"> -->
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+    <!-- <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script> -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <style>
+      .title {
+      padding-left: 30px;
+      }
+
+      .row {
+      padding-left: 30px;
+      width: 90%;
+      }
+
+      .plot {
+      width: 30px;
+      height: 30px;
+      background-color: forestgreen;
+      border: solid black 1px;
+      }
+
+      #infoDiv {
+      padding-left: 30px;
+      }
+
+      .clump {
+      height: 4px;
+      -webkit-animation-duration: 1s;
+      -webkit-animation-name: slidein;
+      }
+
+      @keyframes slidein {
+        from {
+        width: 5px;
+        }
+
+        to {
+        width: 25px;
+        }
+      }
+
+      .tallish {
+      height: 100px;
+      width: 50%;
+      }
+
+      .healthbar {
+      height: 5px;
+      width: 15px;
+      background-color: #00ff00;
+      }
+
+      .healthtext {
+      font-size: 9px;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div class="title">
+        <h1>Treasure!</h1>
+        <div class="tallish well well-small">
+          <h3 id="notification">
+          </h3>
+        </div>
+      </div>
+      <div id="infoDiv">
+        <span>Gold: </span>
+        <span id="goldIndicator"></span>
+        <span> | Digging Implement: </span>
+        <span id="diggerIndicator"></span>
+        <span> | Digging Power: </span>
+        <span id="diggerPowerIndicator"></span>
+        <span> | # of digs: </span>
+        <span id="digsIndicator"></span>
+      </div>
+      <div id="board">
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
