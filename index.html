@@ -17,7 +17,6 @@
 
       .row {
       padding-left: 30px;
-      width: 90%;
       }
 
       .plot {
@@ -73,10 +72,6 @@
     <div>
       <div class="title">
         <h1>Treasure!</h1>
-        <div class="tallish well well-small">
-          <h3 id="notification">
-          </h3>
-        </div>
       </div>
       <div id="infoDiv">
         <span>Gold: </span>
@@ -88,7 +83,14 @@
         <span> | # of digs: </span>
         <span id="digsIndicator"></span>
       </div>
-      <div id="board">
+      <div class="row">
+        <div id="board" class="col-sm-4">
+        </div>
+        <div id="notifications" class="well well-small col-sm-3">
+          <h3>Treasures Found:</h3>
+          <div id="notificationList">
+          </div>
+        </div>
       </div>
     </div>
     <script src="main.js"></script>

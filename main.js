@@ -25,7 +25,7 @@ var player = {
   digger: 'trowel',
   diggerStrength: 1,
   digs: 0,
-  notification: ''
+  treasureCount: 0
 };
 
 function updateUI() {
@@ -34,16 +34,19 @@ function updateUI() {
   window.diggerIndicator.innerText = player.digger;
   window.diggerPowerIndicator.innerText = player.diggerStrength;
 
-  if (player.notification !== window.notification.innerText) {
-    window.notification.innerText = player.notification;
-    player.notification = '';
-  }
+  // if (player.notification !== window.notification.innerText) {
+  //   window.notification.innerText = player.notification;
+  //   player.notification = '';
+  // }
 
   window.digsIndicator.innerText = player.digs;
 }
 
 function handleClick (e) {
-  var depth = parseInt(e.target.getAttribute('data-depth'), 10);
+  var clickedElm = e.target.classList[0] === 'plot' ?
+        e.target :
+        e.target.parentNode;
+  var depth = parseInt(clickedElm.getAttribute('data-depth'), 10);
 
   player.digs++;
 
@@ -54,91 +57,92 @@ function handleClick (e) {
 
   if (depth < 10) {
 
-    var x = parseInt(e.target.getAttribute('data-x'), 10);
-    var y = parseInt(e.target.getAttribute('data-y'), 10);
+    var x = parseInt(clickedElm.getAttribute('data-x'), 10);
+    var y = parseInt(clickedElm.getAttribute('data-y'), 10);
 
     var treasure = plots[y][x].treasure[depth];
+    var treasureValue = 0;
 
     if (treasure) {
       switch (treasure) {
       // Level 0 - 2
       case 'shovel':
-        if (player.digger === 'shovel') {
-          player.gold += 5;
+        if (player.diggerStrength >= 3) {
           treasure = 'silver-dollar';
         } else {
           player.digger = 'shovel';
           player.diggerStrength = 3;
         }
+        treasureValue = 5;
         break;
       case 'silver-dollar':
-        player.gold += 5;
+        treasureValue = 5;
         break;
       case 'quarter':
-        player.gold += 1;
+        treasureValue = 1;
         break;
       case 'arrowhead':
-        player.gold += 10;
+        treasureValue = 10;
         break;
 
       // Level 3 - 5
       case 'excavator':
-        if (player.digger === 'excavator') {
-          player.gold += 20;
+        if (player.diggerStrength >= 5) {
           treasure = 'pearl-earring';
         } else {
           player.digger = 'excavator';
           player.diggerStrength = 5;
         }
+        treasureValue = 20;
         break;
       case 'pearl-earring':
-        player.gold += 20;
+        treasureValue = 20;
         break;
       case 'dinosaur-bone':
-        player.gold += 30;
+        treasureValue = 30;
         break;
       case 'emerald':
-        player.gold += 50;
+        treasureValue = 50;
         break;
 
       // Level 6 - 8
       case 'dynamite':
-        if (player.digger === 'dynamite') {
-          player.gold += 100;
+        if (player.diggerStrength >= 7) {
           treasure = 'antique-pocket-watch';
         } else {
           player.digger = 'dynamite';
           player.diggerStrength = 7;
         }
+        treasureValue = 100;
         break;
       case 'antique-pocket-watch':
-        player.gold += 150;
+        treasureValue = 150;
         break;
       case 'archeological-ruins':
-        player.gold += 200;
+        treasureValue = 200;
         break;
       case 'ghengis-khans-bones':
-        player.gold += 300;
+        treasureValue = 300;
         break;
 
       // Level 9, 10
       case 'laser-drill':
-        if (player.digger === 'laser-drill') {
-          player.gold += 1000;
+        if (player.diggerStrength >= 10) {
           treasure = 'evidence-of-aliens';
         } else {
           player.digger = 'laser-drill';
           player.diggerStrength = 10;
         }
+        treasureValue = 1000;
         break;
       case 'evidence-of-aliens':
-        player.gold += 1500;
+        treasureValue = 1500;
         break;
       case 'the-lost-city-of-atlantis':
-        player.gold += 2000;
+        treasureValue = 2000;
         break;
       case 'the-one-ring':
-        player.gold += 3000;
+        treasureValue = 3000;
         break;
 
       default:
@@ -146,36 +150,47 @@ function handleClick (e) {
 
       } // end switch
 
+      // add to the player's gold
+      player.gold += treasureValue;
+
       // down here in case of digger duplication
-      player.notification = 'You\'ve got treasure! You found ' + treasure;
+      var treasureHeader = document.createElement('h3');
+      treasureHeader.innerText = treasure + " $" +treasureValue;
+      window.notificationList.appendChild(treasureHeader);
+      player.treasureCount++;
+
+      if (player.treasureCount > 7) {
+        var length = window.notificationList.children.length;
+        window.notificationList.children[0].remove();
+      }
 
       // don't get the treasure again
       plots[y][x].treasure[depth] = '';
 
     }// end if treasure
 
-    var healthBar = e.target.childNodes[0];
-    var healthText = e.target.childNodes[1];
+    var healthBar = clickedElm.childNodes[0];
+    var healthText = clickedElm.childNodes[1];
 
-    var health = parseInt(e.target.getAttribute('data-health'), 10) - player.diggerStrength;
+    var health = parseInt(clickedElm.getAttribute('data-health'), 10) - player.diggerStrength;
 
     var healthPercent = health/10;
 
     if (health <= 0) {
       depth++;
-      e.target.setAttribute('data-health', 10 * depth);
+      clickedElm.setAttribute('data-health', 10 * depth);
       healthText.innerText = 10 * depth;
 
       healthBar.setAttribute('style', 'width:' + 15);
-      e.target.setAttribute('style', 'background-color:' + getColor(depth));
+      clickedElm.setAttribute('style', 'background-color:' + getColor(depth));
     } else {
-      e.target.setAttribute('data-health', health);
+      clickedElm.setAttribute('data-health', health);
       healthText.innerText = health;
 
       healthBar.setAttribute('style', 'width:' + (15 - (1/healthPercent)) + "px");
     }
 
-    e.target.setAttribute('data-depth', depth);
+    clickedElm.setAttribute('data-depth', depth);
 
     updateUI();
   }
@@ -200,19 +215,24 @@ $(document).ready( function () {
 
     for (var x = 0; x < 10; x++) {
       plot = document.createElement('div');
-      plot.setAttribute('class', 'col-sm-1 plot');
+      plot.setAttribute('class', 'plot col-sm-1');
+      plot.setAttribute('onmousedown', 'return false');
       plot.setAttribute('data-depth', 0);
       plot.setAttribute('data-health', 3);
       plot.setAttribute('data-x', x);
       plot.setAttribute('data-y', y);
       row.appendChild(plot);
-      plot.addEventListener('click', handleClick);
+      plot.addEventListener('mousedown', handleClick);
       var healthBar = document.createElement('div');
       healthBar.setAttribute('class', 'healthbar');
+      healthBar.setAttribute('onmousedown', 'return false');
+      healthBar.addEventListener('mousedown', handleClick);
       plot.appendChild(healthBar);
       var healthText = document.createElement('div');
       healthText.setAttribute('class', 'healthtext');
+      healthText.setAttribute('onmousedown', 'return false');
       healthText.innerText = '3';
+      healthText.addEventListener('mousedown', handleClick);
       plot.appendChild(healthText);
 
       plots[y][x] = {};
