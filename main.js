@@ -215,7 +215,7 @@ $(document).ready( function () {
 
     for (var x = 0; x < 10; x++) {
       plot = document.createElement('div');
-      plot.setAttribute('class', 'plot col-sm-1');
+      plot.setAttribute('class', 'plot col-xs-1');
       plot.setAttribute('onmousedown', 'return false');
       plot.setAttribute('data-depth', 0);
       plot.setAttribute('data-health', 3);
