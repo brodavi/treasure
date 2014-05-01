@@ -223,16 +223,19 @@ $(document).ready( function () {
       plot.setAttribute('data-y', y);
       row.appendChild(plot);
       plot.addEventListener('mousedown', handleClick);
+      plot.addEventListener('touchstart', handleClick);
       var healthBar = document.createElement('div');
       healthBar.setAttribute('class', 'healthbar');
       healthBar.setAttribute('onmousedown', 'return false');
       healthBar.addEventListener('mousedown', handleClick);
+      healthBar.addEventListener('touchstart', handleClick);
       plot.appendChild(healthBar);
       var healthText = document.createElement('div');
       healthText.setAttribute('class', 'healthtext');
       healthText.setAttribute('onmousedown', 'return false');
       healthText.innerText = '3';
       healthText.addEventListener('mousedown', handleClick);
+      healthText.addEventListener('touchstart', handleClick);
       plot.appendChild(healthText);
 
       plots[y][x] = {};
